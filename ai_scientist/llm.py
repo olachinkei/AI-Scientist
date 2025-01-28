@@ -14,8 +14,10 @@ AVAILABLE_LLMS = [
     "gpt-4o-mini-2024-07-18",
     "gpt-4o-2024-05-13",
     "gpt-4o-2024-08-06",
+    "gpt-4o-2024-11-20",
     "o1-preview-2024-09-12",
     "o1-mini-2024-09-12",
+    "o1-2024-12-17",
     "deepseek-coder-v2-0724",
     "llama3.1-405b",
     # Anthropic Claude models via Amazon Bedrock
@@ -52,6 +54,7 @@ def get_batch_responses_from_llm(
         "gpt-4o-2024-05-13",
         "gpt-4o-mini-2024-07-18",
         "gpt-4o-2024-08-06",
+        "gpt-4o-2024-11-20"
     ]:
         new_msg_history = msg_history + [{"role": "user", "content": msg}]
         response = client.chat.completions.create(
@@ -70,6 +73,22 @@ def get_batch_responses_from_llm(
         new_msg_history = [
             new_msg_history + [{"role": "assistant", "content": c}] for c in content
         ]
+    elif model in ["o1-preview-2024-09-12", "o1-mini-2024-09-12","o1-2024-12-17"]:
+        new_msg_history = msg_history + [{"role": "user", "content": msg}]
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "user", "content": system_message},
+                *new_msg_history,
+            ],
+            temperature=1,
+            max_completion_tokens=MAX_NUM_TOKENS,
+            n=1,
+            #stop=None,
+            seed=0,
+        )
+        content = response.choices[0].message.content
+        new_msg_history = new_msg_history + [{"role": "assistant", "content": content}]
     elif model == "deepseek-coder-v2-0724":
         new_msg_history = msg_history + [{"role": "user", "content": msg}]
         response = client.chat.completions.create(
@@ -180,6 +199,7 @@ def get_response_from_llm(
         "gpt-4o-2024-05-13",
         "gpt-4o-mini-2024-07-18",
         "gpt-4o-2024-08-06",
+        "gpt-4o-2024-11-20",
     ]:
         new_msg_history = msg_history + [{"role": "user", "content": msg}]
         response = client.chat.completions.create(
@@ -196,7 +216,7 @@ def get_response_from_llm(
         )
         content = response.choices[0].message.content
         new_msg_history = new_msg_history + [{"role": "assistant", "content": content}]
-    elif model in ["o1-preview-2024-09-12", "o1-mini-2024-09-12"]:
+    elif model in ["o1-preview-2024-09-12", "o1-mini-2024-09-12","o1-2024-12-17"]:
         new_msg_history = msg_history + [{"role": "user", "content": msg}]
         response = client.chat.completions.create(
             model=model,
@@ -300,7 +320,7 @@ def create_client(model):
     elif 'gpt' in model:
         print(f"Using OpenAI API with model {model}.")
         return openai.OpenAI(), model
-    elif model in ["o1-preview-2024-09-12", "o1-mini-2024-09-12"]:
+    elif model in ["o1-preview-2024-09-12", "o1-mini-2024-09-12","o1-2024-12-17"]:
         print(f"Using OpenAI API with model {model}.")
         return openai.OpenAI(), model
     elif model == "deepseek-coder-v2-0724":

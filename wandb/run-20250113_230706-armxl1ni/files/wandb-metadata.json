@@ -1,0 +1,50 @@
+{
+  "os":  "Linux-6.5.0-35-generic-x86_64-with-glibc2.35",
+  "python":  "CPython 3.11.11",
+  "startedAt":  "2025-01-13T14:07:06.792469Z",
+  "args":  [
+    "--model",
+    "gpt-4o-2024-11-20",
+    "--experiment",
+    "seir",
+    "--num-ideas",
+    "3"
+  ],
+  "program":  "/home/olachinkeigpu/Project/AI-Scientist/launch_scientist.py",
+  "codePath":  "launch_scientist.py",
+  "git":  {
+    "remote":  "https://github.com/olachinkei/AI-Scientist.git",
+    "commit":  "c19f0f8ac575fd2426f56af526adc7a80341a761"
+  },
+  "email":  "keisuke.kamata@wandb.com",
+  "root":  "/home/olachinkeigpu/Project/AI-Scientist",
+  "host":  "olachinkeigpu",
+  "executable":  "/home/olachinkeigpu/miniconda3/envs/ai_scientist/bin/python",
+  "codePathLocal":  "launch_scientist.py",
+  "cpu_count":  24,
+  "cpu_count_logical":  32,
+  "gpu":  "NVIDIA GeForce RTX 4090",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "982820896768",
+      "used":  "866045050880"
+    }
+  },
+  "memory":  {
+    "total":  "67165388800"
+  },
+  "cpu":  {
+    "count":  24,
+    "countLogical":  32
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA GeForce RTX 4090",
+      "memoryTotal":  "25757220864",
+      "cudaCores":  16384,
+      "architecture":  "Ada"
+    }
+  ],
+  "cudaVersion":  "12.6"
+}

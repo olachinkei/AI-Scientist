@@ -286,7 +286,8 @@ def do_idea(
             log.close()
 
 @weave.op()
-def run_ai_scientist(args):
+def run_ai_scientist():
+    args = parse_arguments()
     # Check available GPUs and adjust parallel processes if necessary
     available_gpus = get_available_gpus(args.gpus)
     if args.parallel > len(available_gpus):
@@ -380,5 +381,4 @@ def run_ai_scientist(args):
 
 if __name__ == "__main__":
     weave.init(os.environ["WANDB_ENTITY"]+"/"+os.environ["WANDB_PROJECT"])
-    args = parse_arguments()
-    run_ai_scientist(args)
+    run_ai_scientist()

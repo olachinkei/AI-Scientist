@@ -34,6 +34,7 @@ def parse_arguments():
             "gpt-4o-mini-2024-07-18",
             "gpt-4o-2024-05-13",
             "gpt-4o-2024-08-06",
+            "gpt-4o-2024-11-20",
             "llama-3-1-405b-instruct",
             "deepseek-coder-v2-0724",
             "claude-3-5-sonnet-20240620",
@@ -256,6 +257,7 @@ def review_single_paper(
         "gpt-4o-2024-05-13",
         "gpt-4o-mini-2024-07-18",
         "gpt-4o-2024-08-06",
+        "gpt-4o-2024-11-20",
     ]:
         import openai
 

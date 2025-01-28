@@ -3,6 +3,7 @@ import os
 import os.path as osp
 import time
 from typing import List, Dict, Union
+import weave
 
 import backoff
 import requests
@@ -73,6 +74,7 @@ ONLY INCLUDE "I am done" IF YOU ARE MAKING NO MORE CHANGES."""
 
 
 # GENERATE IDEAS
+@weave.op()
 def generate_ideas(
         base_dir,
         client,
@@ -175,6 +177,7 @@ def generate_ideas(
 
 
 # GENERATE IDEAS OPEN-ENDED
+@weave.op()
 def generate_next_idea(
         base_dir,
         client,
@@ -278,7 +281,7 @@ def on_backoff(details):
         f"calling function {details['target'].__name__} at {time.strftime('%X')}"
     )
 
-
+@weave.op()
 @backoff.on_exception(
     backoff.expo, requests.exceptions.HTTPError, on_backoff=on_backoff
 )
@@ -357,7 +360,7 @@ In <JSON>, respond in JSON format with ONLY the following field:
 A query will work best if you are able to recall the exact name of the paper you are looking for, or the authors.
 This JSON will be automatically parsed, so ensure the format is precise.'''
 
-
+@weave.op()
 def check_idea_novelty(
         ideas,
         base_dir,

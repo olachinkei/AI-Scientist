@@ -9,21 +9,30 @@
         "novel": true
     },
     {
-        "Name": "vaccination_strategy_seir",
-        "Title": "Incorporating Vaccination Strategies into SEIR Dynamics",
-        "Experiment": "Modify the seir_eq function to add a vaccination compartment (V). Implement various vaccination strategies with defined vaccination rates (e.g., 0.1% per day) and specify vaccine efficacy duration (e.g., 6 months). Conduct sensitivity analyses to assess how varying vaccination rates and durations affect peak infections and total infections over time. Compare immediate, phased, and delayed vaccination strategies in terms of their effectiveness in controlling the outbreak.",
+        "Name": "heterogeneous_recovery_seir",
+        "Title": "Incorporating Heterogeneity in Latent and Infectious Periods in SEIR Dynamics",
+        "Experiment": "Modify the seir_eq function to integrate the effects of heterogeneity by representing the latent (lp) and infectious (ip) periods as population-level weighted averages based on predefined probability distributions (e.g., normal, gamma). Update the differential equations to include terms that reflect this variability. Analyze how different distributions influence epidemic metrics like peak infections, total infections, and duration. This approach avoids the computational intensity of Monte Carlo simulations while still capturing the effects of heterogeneity.",
         "Interestingness": 9,
-        "Feasibility": 8,
+        "Feasibility": 9,
         "Novelty": 8,
+        "novel": false
+    },
+    {
+        "Name": "stochastic_seir",
+        "Title": "Incorporating Stochasticity into SEIR Epidemic Dynamics",
+        "Experiment": "Modify the seir_eq function to include stochastic terms by adding Gaussian noise scaled by the square root of the state variables (to reflect scaling with population size). For example, add a noise term to dS, dE, dI, and dR proportional to sqrt(v[i]) where i represents the respective compartment. Use np.random.normal to generate noise during each time step. Run the modified SEIR model multiple times (e.g., 100 simulations) to generate an ensemble of outcomes. Analyze the mean and standard deviation of key metrics such as peak infections, outbreak duration, and total infections across all runs. Investigate how different parameter regimes (e.g., low beta, short latent periods) amplify or dampen stochastic effects.",
+        "Interestingness": 10,
+        "Feasibility": 8,
+        "Novelty": 9,
         "novel": true
     },
     {
-        "Name": "dynamic_social_distancing_seir",
-        "Title": "Modeling Dynamic Social Distancing Responses in SEIR Dynamics",
-        "Experiment": "Modify the seir_eq function to include a social distancing factor that reduces the infection rate based on the number of infections. Define three levels of social distancing (mild, moderate, strict) triggered at specific infection thresholds. Analyze the outcomes in terms of peak infections, total infections, and the duration of the epidemic, comparing results with and without these distancing measures.",
-        "Interestingness": 9,
-        "Feasibility": 9,
+        "Name": "grouped_population_seir",
+        "Title": "Modeling Group-Based Population Dynamics in SEIR Framework",
+        "Experiment": "Extend the SEIR model to include a fixed number of subpopulations (e.g., 2 or 3 groups), each with its own compartments (S, E, I, R). Define a small, predefined contact matrix representing interaction rates between subgroups (e.g., high contact within groups, low or medium contact between groups). Modify the seir_eq function to calculate transitions for each subgroup based on intra-group and inter-group interactions. For each group, dS will depend on infections within the same group and from other groups weighted by the contact matrix. Simulate scenarios such as isolated groups, interconnected groups, and unequal group sizes to analyze their effects on epidemic outcomes (e.g., peak infections, outbreak duration). Compare these results against a homogeneous population model to demonstrate the importance of group-based dynamics.",
+        "Interestingness": 10,
+        "Feasibility": 8,
         "Novelty": 9,
-        "novel": true
+        "novel": false
     }
 ]

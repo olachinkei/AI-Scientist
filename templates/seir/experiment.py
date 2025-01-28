@@ -3,6 +3,8 @@ import json
 import os
 
 import numpy as np
+import weave
+
 from scipy.integrate import odeint
 
 # -----------------------------------------------------------------------------
@@ -19,7 +21,7 @@ if __name__ == "__main__":
     out_dir = args.out_dir
     os.makedirs(out_dir, exist_ok=True)
 
-
+    @weave.op()
     def seir_eq(v, t, beta, lp, ip):
         """Differential equation of SEIR model
         v: [S, E, I, R] Distribution of people in each state

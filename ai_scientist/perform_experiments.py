@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import sys
 from subprocess import TimeoutExpired
+import weave
 
 MAX_ITERS = 4
 MAX_RUNS = 5
@@ -27,6 +28,7 @@ You can then implement the next thing on your list."""
 
 
 # RUN EXPERIMENT
+@weave.op()
 def run_experiment(folder_name, run_num, timeout=7200):
     cwd = osp.abspath(folder_name)
     # COPY CODE SO WE CAN SEE IT.
@@ -85,6 +87,7 @@ If you are finished with experiments, respond with 'ALL_COMPLETED'."""
 
 
 # RUN PLOTTING
+@weave.op()
 def run_plotting(folder_name, timeout=600):
     cwd = osp.abspath(folder_name)
     # LAUNCH COMMAND
@@ -113,6 +116,7 @@ def run_plotting(folder_name, timeout=600):
 
 
 # PERFORM EXPERIMENTS
+@weave.op()
 def perform_experiments(idea, folder_name, coder, baseline_results) -> bool:
     ## RUN EXPERIMENT
     current_iter = 0

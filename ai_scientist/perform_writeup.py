@@ -6,12 +6,15 @@ import re
 import shutil
 import subprocess
 from typing import Optional, Tuple
+import weave
+import wandb
 
 from ai_scientist.generate_ideas import search_for_papers
 from ai_scientist.llm import get_response_from_llm, extract_json_between_markers, create_client, AVAILABLE_LLMS
 
 
 # GENERATE LATEX
+@weave.op()
 def generate_latex(coder, folder_name, pdf_file, timeout=30, num_error_corrections=5):
     folder = osp.abspath(folder_name)
     cwd = osp.join(folder, "latex")  # Fixed potential issue with path
@@ -89,8 +92,9 @@ Pay attention to any accidental uses of HTML syntax, e.g. </end instead of \\end
         else:
             break
     compile_latex(cwd, pdf_file, timeout=timeout)
+    upload_to_wandb("written_paper", pdf_file)
 
-
+@weave.op()
 def compile_latex(cwd, pdf_file, timeout=30):
     print("GENERATING LATEX")
 
@@ -292,7 +296,7 @@ In <JSON>, respond in JSON format with the following fields:
 Do not select papers that are already in the `references.bib` file at the top of the draft, or if the same citation exists under a different name.
 This JSON will be automatically parsed, so ensure the format is precise."""
 
-
+@weave.op()
 def get_citation_aider_prompt(
         client, model, draft, current_round, total_rounds
 ) -> Tuple[Optional[str], bool]:
@@ -398,6 +402,7 @@ Ensure the citation is well-integrated into the text.'''
 
 
 # PERFORM WRITEUP
+@weave.op()
 def perform_writeup(
         idea, folder_name, coder, cite_client, cite_model, num_cite_rounds=20
 ):
@@ -511,7 +516,6 @@ First, re-think the Title if necessary. Keep this concise and descriptive of the
 
     generate_latex(coder, folder_name, f"{folder_name}/{idea['Name']}.pdf")
 
-
 if __name__ == "__main__":
     from aider.coders import Coder
     from aider.models import Model
@@ -570,3 +574,13 @@ if __name__ == "__main__":
             perform_writeup(idea, folder_name, coder, client, client_model)
         except Exception as e:
             print(f"Failed to perform writeup: {e}")
+
+@weave.op()
+def upload_to_wandb(artifact_name, pdf_path):
+    # Initialize a WandB run
+    artifact = wandb.Artifact(name=artifact_name,
+                              type="pdf")    
+    artifact.add_file(local_path=pdf_path, name=os.path.basename(pdf_path))
+    artifact.save()
+    print(f"Uploaded {pdf_path} to WandB as artifact '{artifact_name}'.")
+    return f'{os.environ["WANDB_ENTITY"]}/{os.environ["WANDB_PROJECT"]}/{artifact_name}'

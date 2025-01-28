@@ -9,6 +9,7 @@ from ai_scientist.llm import (
     get_batch_responses_from_llm,
     extract_json_between_markers,
 )
+import weave
 
 reviewer_system_prompt_base = (
     "You are an AI researcher who is reviewing a paper that was submitted to a prestigious ML venue."
@@ -122,7 +123,7 @@ In general, authors should be rewarded rather than punished for being up front a
     + template_instructions
 )
 
-
+@weave.op()
 def perform_review(
     text,
     model,
@@ -357,7 +358,7 @@ You are in charge of meta-reviewing a paper that was reviewed by {reviewer_count
 Your job is to aggregate the reviews into a single meta-review in the same format.
 Be critical and cautious in your decision, find consensus, and respect the opinion of all the reviewers."""
 
-
+@weave.op()
 def get_meta_review(model, client, temperature, reviews):
     # Write a meta-review from a set of individual reviews
     review_text = ""
@@ -382,7 +383,7 @@ Review {i + 1}/{len(reviews)}:
     meta_review = extract_json_between_markers(llm_review)
     return meta_review
 
-
+@weave.op()
 def perform_improvement(review, coder):
     improvement_prompt = '''The following review has been created for your research paper:
 """
